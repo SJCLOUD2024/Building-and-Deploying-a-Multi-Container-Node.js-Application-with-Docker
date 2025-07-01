@@ -1,6 +1,5 @@
 # GitHub Actions CI/CD Workflow for Docker Compose
 
-# .github/workflows/docker-compose-ci.yml
 name: Docker Compose CI
 
 on:
@@ -22,19 +21,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set up Docker Compose
-        uses: ndeloof/install-compose-action@v0.0.1
+      - name: Start and build containers with Docker Compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          version: v2.1.0
-
-      - name: Build and run containers
-        run: docker-compose -f docker-compose.yaml up -d --build
+          compose-file: docker-compose.yaml
+          command: up
+          args: -d --build
 
       - name: Wait for services to start
         run: sleep 30
 
       - name: Verify frontend is accessible
         run: curl --fail http://localhost:3000 || exit 1
-      
+
       - name: Shut down containers
-        run: docker-compose down
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: docker-compose.yaml
+          command: down
