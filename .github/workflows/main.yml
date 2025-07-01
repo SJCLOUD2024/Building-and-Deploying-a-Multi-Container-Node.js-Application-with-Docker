@@ -15,15 +15,6 @@ jobs:
   docker-compose-ci:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.24
-        options: --privileged
-        ports:
-          - 3000:3000
-          - 80:80
-          - 27017:27017
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,17 +23,21 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Set up Docker Compose
-        run: curl -L "https://github.com/docker/compose/releases/download/v2.24.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
-             chmod +x /usr/local/bin/docker-compose
+        uses: ndeloof/install-compose-action@v1
+        with:
+          version: v2.24.2
 
       - name: Build and run containers
         run: docker-compose -f docker-compose.yml up -d --build
 
       - name: Wait for services to start
-        run: sleep 15
+        run: sleep 30
 
       - name: Verify backend is running
         run: curl --fail http://localhost || exit 1
 
       - name: Verify frontend is accessible
         run: curl --fail http://localhost:3000 || exit 1
+      
+      - name: Shut down containers
+        run: docker-compose down
