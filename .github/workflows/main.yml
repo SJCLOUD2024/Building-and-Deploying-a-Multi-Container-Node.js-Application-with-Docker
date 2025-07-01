@@ -46,6 +46,3 @@ jobs:
 
       - name: Verify frontend is accessible
         run: curl --fail http://localhost:3000 || exit 1
-
-      - name: Shut down containers
-        run: docker-compose down
