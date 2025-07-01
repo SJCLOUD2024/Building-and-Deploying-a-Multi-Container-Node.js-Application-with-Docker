@@ -28,7 +28,7 @@ jobs:
           version: v2.1.0
 
       - name: Build and run containers
-        run: docker-compose -f docker-compose.yml up -d --build
+        run: docker-compose -f docker-compose.yaml up -d --build
 
       - name: Wait for services to start
         run: sleep 30
