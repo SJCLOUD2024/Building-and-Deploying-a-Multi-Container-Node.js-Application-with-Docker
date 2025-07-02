@@ -4,8 +4,9 @@ services:
     image: 'mongo:4.4'
     volumes: 
       - data:/data/db
-    env_file:
-      - ./env/mongo.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
   backend:
     build: ./backend
     ports: 
