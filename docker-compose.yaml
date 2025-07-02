@@ -14,8 +14,9 @@ services:
       - logs:/app/logs
       - ./backend:/app
       - /app/node_modules
-    env_file:
-      - ./env/backend.env
+    environment:
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
     depends_on:
       - mongodb
 
