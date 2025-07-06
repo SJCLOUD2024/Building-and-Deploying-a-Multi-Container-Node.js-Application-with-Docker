@@ -2,6 +2,9 @@
 
 🚀 This project demonstrates a full-stack application containerized using Docker and Docker Compose, combining a Node.js backend, React frontend, and MongoDB database.
 
+![Picture1](https://github.com/user-attachments/assets/39cadc74-0bf3-4aa9-9a9a-d48fac7c32e0)
+
+
 ---
 
 ## **Project Overview**
