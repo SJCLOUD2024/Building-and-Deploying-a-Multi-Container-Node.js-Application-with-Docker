@@ -26,19 +26,12 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      
+      - name: Build backend image
+        run: docker build -t backend ./backend
 
-      - name: Start and build containers with Docker Compose
-        uses: hoverkraft-tech/compose-action@v2.0.1
-        with:
-          compose-file: docker-compose.yaml
-          command: up
-          args: -d --build
-
-      - name: Wait for services to start
-        run: sleep 30
-
-      - name: Verify frontend is accessible
-        run: curl --fail http://localhost:3000 || exit 1
+      - name: Build frontend image
+        run: docker build -t frontend ./frontend
 
       - name: Run Trivy vulnerability scanner (backend)
         uses: aquasecurity/trivy-action@master
@@ -55,6 +48,19 @@ jobs:
           format: table
           exit-code: 1
           ignore-unfixed: true  
+
+      - name: Start and build containers with Docker Compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: docker-compose.yaml
+          command: up
+          args: -d
+
+      - name: Wait for services to start
+        run: sleep 30
+
+      - name: Verify frontend is accessible
+        run: curl --fail http://localhost:3000 || exit 1
 
       - name: Shut down containers
         uses: hoverkraft-tech/compose-action@v2.0.1
