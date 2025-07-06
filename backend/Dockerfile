@@ -1,12 +1,22 @@
-FROM node
+# ----Stage 1 -----
+
+FROM node:20-alpine as builder
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json ./
 
 RUN npm install
 
 COPY . .
+
+# ----stage 2 ------
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app /app
 
 EXPOSE 80
 
